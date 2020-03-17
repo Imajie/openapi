@@ -3,6 +3,15 @@ info:
   version: 1.0.0
   title: Petstore API
 
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+security:
+  - basicAuth: []
+
 paths:
   /pets:
     get:
