@@ -11,6 +11,7 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.imajie.api.common.api.impl.AuthFilter;
 import org.imajie.api.common.api.impl.GsonProvider;
+import org.imajie.api.common.api.impl.LdapLoginService;
 import org.imajie.api.common.api.impl.PetsApiImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,12 +38,11 @@ public class CLIDriver {
         constraintMapping.setConstraint(constraint);
         constraintMapping.setPathSpec("/*");
 
-        UserStore userStore = new UserStore();
-        userStore.addUser("user", new Password("pass"), new String[]{"user"});
-        userStore.addUser("admin", new Password("pass"), new String[]{"user","admin"});
-
-        HashLoginService loginService = new HashLoginService();
-        loginService.setUserStore(userStore);
+        LdapLoginService loginService = new LdapLoginService(
+                "ldap://localhost",
+                "ou=accounts,dc=example,dc=org",
+                "cn=readonly,dc=example,dc=org",
+                "readonlyPass");
 
         BasicAuthenticator basicAuthenticator = new BasicAuthenticator();
 
@@ -54,6 +54,7 @@ public class CLIDriver {
         securityHandler.addConstraintMapping(constraintMapping);
         securityHandler.setLoginService(loginService);
         securityHandler.setAuthenticator(basicAuthenticator);
+        securityHandler.setRoles(roles);
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS | ServletContextHandler.SECURITY);
         context.setContextPath("/");

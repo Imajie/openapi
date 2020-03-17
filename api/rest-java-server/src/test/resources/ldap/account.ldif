@@ -1,0 +1,38 @@
+version: 1
+
+dn: ou=accounts,dc=example,dc=org
+objectClass: organizationalunit
+ou: accounts
+
+dn: ou=users,ou=accounts,dc=example,dc=org
+objectClass: organizationalunit
+ou: users
+
+dn: uid=user,ou=users,ou=accounts,dc=example,dc=org
+objectClass: inetOrgPerson
+cn: User
+sn: user
+uid: user
+userPassword: userPass
+
+dn: uid=admin,ou=users,ou=accounts,dc=example,dc=org
+objectClass: inetOrgPerson
+cn: Admin
+sn: admin
+uid: admin
+userPassword: adminPass
+
+dn: ou=groups,ou=accounts,dc=example,dc=org
+objectClass: organizationalunit
+ou: groups
+
+dn: cn=user,ou=groups,ou=accounts,dc=example,dc=org
+objectClass: groupOfNames
+cn: user
+member: uid=user,ou=users,ou=accounts,dc=example,dc=org
+member: uid=admin,ou=users,ou=accounts,dc=example,dc=org
+
+dn: cn=admin,ou=groups,ou=accounts,dc=example,dc=org
+objectClass: groupOfNames
+cn: admin
+member: uid=admin,ou=users,ou=accounts,dc=example,dc=org
